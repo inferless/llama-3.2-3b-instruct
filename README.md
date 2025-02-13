@@ -1,9 +1,8 @@
-# Tutorial - Deploy Stable-Diffusion-3 using Inferless
-[Stable Diffusion 3](https://huggingface.co/stabilityai/stable-diffusion-3-medium-diffusers) sets a new benchmark in AI image generation, delivering unparalleled image quality with enhanced efficiency. Utilizing a sophisticated Multimodal Diffusion Transformer (MMDiT) architecture, it significantly reduces noise and improves clarity.
+# Tutorial - Deploy Llama-3.2-3B-Instruct using Inferless
+[Llama-3.2-3B-Instruct](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct) sets a new benchmark in AI image generation, delivering unparalleled image quality with enhanced efficiency. Utilizing a sophisticated Multimodal Diffusion Transformer (MMDiT) architecture, it significantly reduces noise and improves clarity.
 
 ## TL;DR:
-- Deployment of stable-diffusion-3-medium-diffusers model using [Diffusers](https://github.com/huggingface/diffusers).
-- You can expect an average latency of `4.4 sec` for generating an image in `28`steps. This setup has an average cold start time of `9.9 sec` *(For benchmark we have used Nvidia A100-80GB GPU)*.
+- Deployment of Llama-3.2-3B-Instruct model using [vLLM](https://github.com/vllm-project/vllm/).
 - Dependencies defined in `inferless-runtime-config.yaml`.
 - GitHub/GitLab template creation with `app.py`, `inferless-runtime-config.yaml` and `inferless.yaml`.
 - Model class in `app.py` with `initialize`, `infer`, and `finalize` functions.
