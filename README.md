@@ -75,11 +75,13 @@ Open the `app.py` file. This contains the main code for inference. It has three 
 **Infer** - This function is where the inference happens. The argument to this function `inputs`, is a dictionary containing all the input parameters. The keys are the same as the name given in inputs. Refer to [input](https://docs.inferless.com/model-import/input-output-schema) for more.
 
 ```python
-def infer(self, inputs):
-    prompt = inputs["prompt"]
-    negative_prompt = inputs["negative_prompt"]
-    inference_steps = inputs["num_inference_steps"]
-    guidance_scale = inputs["guidance_scale"]
+    def infer(self, inputs):
+        prompts = inputs["prompt"]
+        temperature = inputs.get("temperature",0.7)
+        top_p = inputs.get("top_p",0.1)
+        repetition_penalty = inputs.get("repetition_penalty",1.18)
+        top_k = int(inputs.get("top_k",40))
+        max_tokens = inputs.get("max_tokens",256)
 ```
 
 **Finalize** - This function is used to perform any cleanup activity for example you can unload the model from the gpu by setting to `None`.
