@@ -87,7 +87,7 @@ Open the `app.py` file. This contains the main code for inference. It has three 
 **Finalize** - This function is used to perform any cleanup activity for example you can unload the model from the gpu by setting to `None`.
 ```python
 def finalize(self):
-    self.pipe = None
+    self.llm = None
 ```
 
 For more information refer to the [Inferless docs](https://docs.inferless.com/).
