@@ -8,7 +8,7 @@
 - Model class in `app.py` with `initialize`, `infer`, and `finalize` functions.
 - Custom runtime creation with necessary system and Python packages.
 - Model import via GitHub with `input_schema.py` file.
-- Recommended GPU: NVIDIA A10.
+- Recommended GPU: NVIDIA A100.
 - Custom runtime selection in advanced configuration.
 - Final review and deployment on the Inferless platform.
 
