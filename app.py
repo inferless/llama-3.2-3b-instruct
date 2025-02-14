@@ -29,7 +29,7 @@ class InferlessPythonModel:
         sampling_params = SamplingParams(temperature=request.temperature,top_p=request.top_p,
                                          repetition_penalty=request.repetition_penalty,
                                          top_k=request.top_k,max_tokens=request.max_tokens)
-        input_text = self.tokenizer.apply_chat_template([{"role": "user", "content": request.prompts}], tokenize=False)
+        input_text = self.tokenizer.apply_chat_template([{"role": "user", "content": request.prompt}], tokenize=False)
         result = self.llm.generate(input_text, sampling_params)
         result_output = [output.outputs[0].text for output in result]
         generateObject = ResponseObjects(generated_result = result_output[0])
