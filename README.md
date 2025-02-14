@@ -1,5 +1,5 @@
 # Tutorial - Deploy Llama-3.2-3B-Instruct using Inferless
-[Llama-3.2-3B-Instruct](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct) sets a new benchmark in AI image generation, delivering unparalleled image quality with enhanced efficiency. Utilizing a sophisticated Multimodal Diffusion Transformer (MMDiT) architecture, it significantly reduces noise and improves clarity.
+[Llama-3.2-3B-Instruct](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct) is Meta’s streamlined, 3B small language model fine-tuned for instruction following and conversational applications. This model is optimized for multilingual dialogue, retrieval, summarization, and prompt rewriting, delivering impressive performance despite its modest size. Its efficient, auto-regressive transformer architecture with innovations like Grouped-Query Attention ensures low latency and ease of deployment, making it ideal for local inference on a wide range of hardware, from edge devices to personal laptops. Whether used as a base for further fine-tuning or as a ready-to-use conversational agent, Llama-3.2-3B-Instruct offers a compelling balance of speed, capability, and accessibility. 
 
 ## TL;DR:
 - Deployment of Llama-3.2-3B-Instruct model using [vLLM](https://github.com/vllm-project/vllm/).
@@ -37,32 +37,53 @@ Enter all the required details to Import your model. Refer [this link](https://d
 Following is an example of the curl command you can use to make inference. You can find the exact curl command in the Model's API page in Inferless.
 ```bash
 curl --location '<your_inference_url>' \
-          --header 'Content-Type: application/json' \
-          --header 'Authorization: Bearer <your_api_key>' \
-          --data '{
-              "inputs": [
-                {
-                  "data": ["a living room, bright modern Scandinavian style house, large windows, magazine photoshoot, 8k, studio lighting"],
-                  "name": "prompt",
-                  "shape": [1],
-                  "datatype": "BYTES"},
-                {
-                  "data": ["low quality"],
-                  "name": "negative_prompt",
-                  "shape": [1],
-                  "datatype": "BYTES"},
-                {
-                  "data": [28],
-                  "name": "num_inference_steps"
-                  "shape": [1],
-                  "datatype": "INT8"},
-                {
-                  "data": [7.0],
-                  "name": "guidance_scale"
-                  "shape": [1],
-                  "datatype": "FP32"}
-                  ]
-            }'
+    --header 'Content-Type: application/json' \
+    --header 'Authorization: Bearer <your_api_key>' \
+    --data '{
+      "inputs": [
+        {
+          "name": "prompt",
+          "shape": [1],
+          "data": ["What is deep learning?"],
+          "datatype": "BYTES"
+        },
+        {
+          "name": "temperature",
+          "optional": true,
+          "shape": [1],
+          "data": [0.7],
+          "datatype": "FP32"
+        },
+        {
+          "name": "top_p",
+          "optional": true,
+          "shape": [1],
+          "data": [0.1],
+          "datatype": "FP32"
+        },
+        {
+          "name": "repetition_penalty",
+          "optional": true,
+          "shape": [1],
+          "data": [1.18],
+          "datatype": "FP32"
+        },
+        {
+          "name": "max_tokens",
+          "optional": true,
+          "shape": [1],
+          "data": [512],
+          "datatype": "INT16"
+        },
+        {
+          "name": "top_k",
+          "optional": true,
+          "shape": [1],
+          "data": [40],
+          "datatype": "INT8"
+        }
+      ]
+    }'
 ```
 
 
@@ -75,13 +96,13 @@ Open the `app.py` file. This contains the main code for inference. It has three 
 **Infer** - This function is where the inference happens. The argument to this function `inputs`, is a dictionary containing all the input parameters. The keys are the same as the name given in inputs. Refer to [input](https://docs.inferless.com/model-import/input-output-schema) for more.
 
 ```python
-    def infer(self, inputs):
-        prompts = inputs["prompt"]
-        temperature = inputs.get("temperature",0.7)
-        top_p = inputs.get("top_p",0.1)
-        repetition_penalty = inputs.get("repetition_penalty",1.18)
-        top_k = int(inputs.get("top_k",40))
-        max_tokens = inputs.get("max_tokens",256)
+def infer(self, inputs):
+    prompts = inputs["prompt"]
+    temperature = inputs.get("temperature",0.7)
+    top_p = inputs.get("top_p",0.1)
+    repetition_penalty = inputs.get("repetition_penalty",1.18)
+    top_k = int(inputs.get("top_k",40))
+    max_tokens = inputs.get("max_tokens",256)
 ```
 
 **Finalize** - This function is used to perform any cleanup activity for example you can unload the model from the gpu by setting to `None`.
