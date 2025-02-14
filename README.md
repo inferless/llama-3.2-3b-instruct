@@ -85,23 +85,26 @@ curl --location '<your_inference_url>' \
     }'
 ```
 
-
 ---
 ## Customizing the Code
-Open the `app.py` file. This contains the main code for inference. It has three main functions, initialize, infer and finalize.
+Open the `app.py` file. This contains the main code for inference. The `InferlessPythonModel` has three main functions, initialize, infer and finalize.
 
 **Initialize** -  This function is executed during the cold start and is used to initialize the model. If you have any custom configurations or settings that need to be applied during the initialization, make sure to add them in this function.
 
-**Infer** - This function is where the inference happens. The argument to this function `inputs`, is a dictionary containing all the input parameters. The keys are the same as the name given in inputs. Refer to [input](https://docs.inferless.com/model-import/input-output-schema) for more.
+**Infer** - This function is where the inference happens. The infer function leverages both RequestObjects and ResponseObjects to handle inputs and outputs in a structured and maintainable way.
+- RequestObjects: Defines the input schema, validating and parsing the input data.
+- ResponseObjects: Encapsulates the output data, ensuring consistent and structured API responses.
 
 ```python
-def infer(self, inputs):
-    prompts = inputs["prompt"]
-    temperature = inputs.get("temperature",0.7)
-    top_p = inputs.get("top_p",0.1)
-    repetition_penalty = inputs.get("repetition_penalty",1.18)
-    top_k = int(inputs.get("top_k",40))
-    max_tokens = inputs.get("max_tokens",256)
+  def infer(self, request: RequestObjects) -> ResponseObjects:
+    sampling_params = SamplingParams(temperature=request.temperature,top_p=request.top_p,repetition_penalty=request.repetition_penalty,
+                     top_k=request.top_k,max_tokens=request.max_tokens)
+    input_text = self.tokenizer.apply_chat_template([{"role": "user", "content": request.prompt}], tokenize=False)
+    result = self.llm.generate(input_text, sampling_params)
+    result_output = [output.outputs[0].text for output in result]
+
+    generateObject = ResponseObjects(generated_text = result_output[0])        
+    return generateObject
 ```
 
 **Finalize** - This function is used to perform any cleanup activity for example you can unload the model from the gpu by setting to `None`.
@@ -109,5 +112,6 @@ def infer(self, inputs):
 def finalize(self):
     self.llm = None
 ```
+
 
 For more information refer to the [Inferless docs](https://docs.inferless.com/).
