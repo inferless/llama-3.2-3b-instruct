@@ -1,6 +1,6 @@
 version: 1.0.0
 
-name: llama-3.2-3b-instruct
+name: llama-3-2-3b-instruct
 import_source: GIT
 
 # you can choose the options between ONNX, TENSORFLOW, PYTORCH
