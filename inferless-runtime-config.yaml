@@ -4,3 +4,5 @@ build:
     - vllm==0.7.2
     - inferless==0.2.6
     - pydantic==2.10.2
+    - hf-transfer==0.1.9
+    - huggingface-hub==0.27.1
